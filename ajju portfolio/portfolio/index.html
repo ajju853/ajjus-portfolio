@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajim Patel - Full Stack Developer</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <style>
+    :root {
+    --primary-color: #00ffff;
+    --secondary-color: #ff00ff;
+    --accent-color: #ffff00;
+    --text-color: #ffffff;
+    --bg-color: #000033;
+    --card-bg: rgba(255, 255, 255, 0.1);
+    --shadow-color: rgba(0, 255, 255, 0.5);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+#particles-js {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+}
+
+header {
+    background-color: rgba(0, 0, 51, 0.8);
+    padding: 20px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+nav a {
+    color: var(--primary-color);
+    text-decoration: none;
+    margin: 10px 15px;
+    font-size: 1.1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+nav a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--accent-color);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+}
+
+nav a:hover::after {
+    transform: translateX(0);
+}
+
+h1,
+h2,
+h3 {
+    font-family: 'Orbitron', sans-serif;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 3rem;
+    text-align: center;
+    color: var(--primary-color);
+    text-shadow: 0 0 10px var(--primary-color);
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from {
+        text-shadow: 0 0 10px var(--primary-color);
+    }
+    to {
+        text-shadow: 0 0 20px var(--primary-color), 0 0 30px var(--secondary-color);
+    }
+}
+
+h2 {
+    font-size: 2.5rem;
+    color: var(--secondary-color);
+}
+
+.section {
+    margin-bottom: 60px;
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background-color: var(--card-bg);
+    padding: 20px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 255, 255, 0.3);
+}
+
+.profile-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin: 20px auto;
+    display: block;
+    transition: box-shadow 0.3s ease;
+}
+
+.profile-image:hover {
+    box-shadow: 0 4px 20px var(--shadow-color);
+}
+
+.social-image {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 150px;
+    transition: transform 0.3s ease;
+}
+
+.social-image:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 20px var(--shadow-color);
+}
+
+.contact-item {
+    margin-bottom: 10px;
+}
+
+.contact-item i {
+    margin-right: 10px;
+    color: var(--accent-color);
+}
+
+#message-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#message-form input,
+#message-form textarea {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    color: var(--text-color);
+    font-family: 'Roboto', sans-serif;
+}
+
+#message-form textarea {
+    height: 150px;
+    resize: vertical;
+}
+
+.submit-btn {
+    background-color: var(--primary-color);
+    color: var(--bg-color);
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(255, 0, 255, 0.4);
+}
+
+.card {
+    background-color: var(--card-bg);
+    padding: 20px;
+    border-radius: 10px;
+    transition: all 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.card.hover-effect:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 10px 20px rgba(0, 255, 255, 0.5);
+}
+
+.card a {
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.card a:hover {
+    color: var(--primary-color);
+}
+
+.about-content {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.about-content:hover {
+    transform: scale(1.02);
+}
+
+.about-content p {
+    margin-bottom: 15px;
+}
+
+.about-content a {
+    color: var(--primary-color);
+    text-decoration: underline;
+    transition: color 0.3s ease;
+}
+
+.about-content a:hover {
+    color: var(--secondary-color);
+}
+
+.section {
+    padding: 40px 0;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 255, 255, 0.5);
+}
+
+.card h3 {
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+    color: var(--primary-color);
+}
+
+.card p {
+    font-size: 0.9rem;
+    color: var(--text-color);
+}
+
+.about-content {
+    background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(255, 0, 255, 0.1));
+    border-radius: 10px;
+    padding: 30px;
+    margin: 20px 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.about-content:hover {
+    transform: scale(1.02);
+}
+
+.about-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.about-content:hover::before {
+    opacity: 1;
+}
+
+.about-content p {
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--text-color);
+}
+
+.about-content a {
+    color: var(--primary-color);
+    text-decoration: underline;
+    transition: color 0.3s ease;
+}
+
+.about-content a:hover {
+    color: var(--secondary-color);
+}
+</style>
+</head>
+
+<body>
+    <div id="particles-js"></div>
+    <header>
+        <nav>
+            <a href="#about">About</a>
+            <a href="#skills">Skills</a>
+            <a href="#projects">Projects</a>
+            <a href="#interests">Interests</a>
+            <a href="#hobbies">Hobbies</a>
+            <a href="#contact">Contact</a>
+            <a href="#quotes">Quotes</a>
+            <a href="#music">Music</a>
+            <a href="#travel">Travel</a>
+        </nav>
+    </header>
+
+    <div class="container">
+    <section id="about" class="section"></section>
+    <h1>Ajim Patel</h1>
+    <img src="images/ajim.png" alt="Ajim Patel" class="profile-image" onclick="changeImageColor()">
+    <div class="about-content">
+        <p class="intro">💻⚡ Aspiring Full Stack Developer | JavaScript & Java Enthusiast | DevOps Advocate | Cloud Computing Buff | Data Structures & Algorithms Aficionado 🇮🇳 | Passionate about Driving Tech Innovation 💻⚡</p>
+        <br>
+        <p><strong>Education:</strong> Currently studying in BCA 3rd Year at Punyashlok Ahilyadevi Holkar Solapur University, Solapur.</p>
+        <p><strong>Location:</strong> Solapur, Maharashtra, India</p>
+        <p><strong>Contact:</strong> Email: <a href="mailto:ajimp340@gmail.com">ajimp340@gmail.com</a></p>
+        <p><strong>About Me:</strong> I am driven by a passion for technology and its potential to create meaningful advancements. My expertise spans data analysis, programming languages like Java and Python, and a strong foundation in DevOps and generative AI. I am committed to continuous personal and professional growth, always eager to learn and innovate.</p>
+    </div>
+</section>
+
+        <section id="social" class="section">
+            <h2>Connect with Me</h2>
+            <p>Instagram: <a href="https://instagram.com/ajju_p__" target="_blank">@ajju_p__</a></p>
+        </section>
+
+        <section id="books" class="section">
+            <h2>Favorite Books & Resources</h2>
+            <div class="grid">
+                <div class="card">"Clean Code" by Robert C. Martin</div>
+                <div class="card">"You Don't Know JS" by Kyle Simpson</div>
+                <div class="card">"MDN Web Docs"</div>
+                <div class="card">"Rich dad poor dad</div>
+                <div class="card">"The Pragmatic Programmer" by Andrew Hunt and David Thomas".</div>
+            </div>
+        </section>
+        <section id="values" class="section">
+    <h2>Core Values</h2>
+    <div class="values">
+        <p>🔍 Curiosity: Always eager to learn and explore new technologies.</p>
+        <p>🤝 Collaboration: Believe in the power of teamwork and shared goals.</p>
+        <p>🌱 Growth Mindset: Embrace challenges as learning opportunities.</p>
+        <p>🧩 Problem-Solving: Passionate about finding creative solutions.</p>
+    </div>
+</section>
+
+
+        <section id="music" class="section">
+            <h2>Music & Playlists</h2>
+            <p>My favorite genres include:</p>
+            <ul>
+                <li>Lo-fi Hip Hop</li>
+                <li>Chillstep</li>
+                <li>Indie Pop</li>
+            </ul>
+            <p>Check out my curated playlists on Spotify!</p>
+        </section>
+
+        <section id="travel" class="section">
+            <h2>Travel & Adventures</h2>
+            <p>I love exploring new places! Here are some of my favorite travel experiences:</p>
+            <ul>
+                <li>Hiking in the Western Ghats</li>
+                <li>Exploring the beaches of Goa</li>
+                <li>Cultural trip to Rajasthan</li>
+            </ul>
+        </section>
+
+        <section id="quotes" class="section">
+            <h2>Quotes or Life Philosophy</h2>
+            <blockquote>
+                "The only way to do great work is to love what you do." - Steve Jobs
+            </blockquote>
+            <blockquote>
+                "In the middle of every difficulty lies opportunity." - Albert Einstein
+            </blockquote>
+        </section>
+        <section id="learning-goals" class="section">
+    <h2>Learning Goals</h2>
+    <div class="learning-goals">
+        <p>🌐 Become proficient in cloud technologies and DevOps.</p>
+        <p>💻 Master advanced JavaScript and its frameworks.</p>
+        <p>📊 Deepen knowledge in data analytics for business applications.</p>
+        <p>🧠 Pursue an MBA with a focus on technology management.</p>
+    </div>
+</section>
+
+
+        <section id="skills" class="section">
+            <h2>Top Skills</h2>
+            <div class="grid">
+                <div class="card">JavaScript</div>
+                <div class="card">Java</div>
+                <div class="card">Python</div>
+                <div class="card">React</div>
+                <div class="card">Node.js</div>
+                <div class="card">DevOps</div>
+                <div class="card">Data Structures</div>
+                <div class="card">Algorithms</div>
+            </div>
+        </section>
+        <section id="projects" class="section"></section>
+            <h2>Projects</h2>
+            <div class="grid">
+                
+                <div class="card hover-effect"><a href="https://github.com/ajju853/financial-report-project-advance-version">Financial Report Project</a></div>
+                <div class="card hover-effect"><a href="https://github.com/ajju853/visualize">Visualize</a></div>
+                <div class="card hover-effect"><a href="https://github.com/ajju853/full-stack-crypto-app">Full Stack Crypto App</a></div>
+                <div class="card hover-effect"><a href="https://github.com/ajju853/web-based-language-learning-tool">Web-Based Language Learning Tool</a></div>
+                <div class="card hover-effect"><a href="https://github.com/ajju853/palidromchecking">Palindrome Checking</a></div>
+                <div class="card hover-effect"><a href="https://github.com/ajju853/Virtual-bank">Virtual Bank</a></div>
+                <div class="card hover-effect"><a href="https://github.com/ajju853/Image-recognition-with-TensorFlow.js">Image Recognition with TensorFlow.js</a></div>
+                <div class="card hover-effect"><a href="https://github.com/ajju853/Billing-software">Billing Software</a></div>
+                <div class="card hover-effect"><a href="https://github.com/ajju853/BMI-Calculator-">BMI Calculator</a></div>
+                <div class="card hover-effect"><a href="https://github.com/ajju853/CineMagic">CineMagic</a></div>
+                <div class="card hover-effect"><a href="https://github.com/ajju853/Rock-paper-scissor">Rock Paper Scissors</a></div>
+                <div class="card hover-effect"><a href="https://github.com/ajju853/EduSync-Pro-Your-Advanced-Academic-Companion">EduSync Pro</a></div>
+                <div class="card hover-effect"><a href="https://github.com/ajju853/FinanceFlow-Pro---Advanced-Financial-Management">FinanceFlow Pro</a></div>
+                <div class="card hover-effect"><a href="https://github.com/ajju853/advance-version-of-portfolio">Portfolio</a></div>
+                <div class="card hover-effect"><a href="https://github.com/ajju853/Finance-tracker">Finance Tracker</a></div>
+                <div class="card hover-effect"><a href="https://github.com/ajju853/nameexplorer">Name Explorer</a></div>
+                <div class="card hover-effect"><a href="https://github.com/ajju853/GitHub-Galaxy-Explorer">GitHub Galaxy Explorer</a></div>
+                <div class="card hover-effect"><a href="https://github.com/ajju853/crypto-fullstack">Crypto Fullstack</a></div>
+                <div class="card hover-effect"><a href="https://github.com/ajju853/visualize-app896">Visualize App896</a></div>
+                <div class="card hover-effect"><a href="https://github.com/ajju853/visualize-app">Visualize App</a></div>
+                <div class="card hover-effect"><a href="https://github.com/ajju853/gdp-dashboard-1">GDP Dashboard 1</a></div>
+                <div class="card hover-effect"><a href="https://github.com/ajju853/gdp-dashboard">GDP Dashboard</a></div>
+                <div class="card hover-effect"><a href="https://github.com/ajju853/data-visualize-">Data Visualize</a></div>
+                <div class="card hover-effect"><a href="https://github.com/ajju853/Crypto-webapp">Crypto Webapp</a></div>
+         
+            </div>
+        </section>
+
+        <section id="interests" class="section">
+            <h2>Interests</h2>
+            <div class="grid">
+                <div class="card">Artificial Intelligence</div>
+                <div class="card">Blockchain Technology</div>
+                <div class="card">Cybersecurity</div>
+                <div class="card">Open Source Contributions</div>
+            </div>
+        </section>
+         <section id="fun-facts" class="section">
+            <h2>Fun Facts</h2>
+            <div class="fun-facts">
+                <p>🌍 I speak 3 languages fluently.</p>
+                <p>🚀 Completed over 15 projects.</p>
+                <p>🍕 My favorite programming snack is pizza!</p>
+                <p>💻 My preferred development environment is Visual Studio Code.</p>
+            </div>
+        </section>
+
+        <section id="hobbies" class="section">
+            <h2>Hobbies</h2>
+            <div class="grid">
+                <div class="card">Photography</div>
+                <div class="card">Traveling</div>
+                <div class="card">Reading Science Fiction</div>
+                <div class="card">Playing Video Games</div>
+                <div class="card">Cooking</div>
+            </div>
+        </section>
+
+        <section id="contact" class="section">
+            <h2>Contact Me</h2>
+            <div class="contact-item"><i class="fas fa-envelope"></i> Email: <a href="mailto:ajimp340@gmail.com">ajimp340@gmail.com</a></div>
+            <div class="contact-item"><i class="fas fa-phone"></i> Phone: +91 9325480476</div>
+            <div class="contact-item"><i class="fab fa-linkedin"></i> LinkedIn: <a
+                    href="https://www.linkedin.com/in/ajim-patel/" target="_blank">Ajim Patel</a></div>
+            <div class="contact-item"><i class="fab fa-github"></i> GitHub: <a href="https://github.com/ajju853"
+                    target="_blank">ajju853</a></div>
+            <div class="contact-item"><i class="fab fa-leetcode"></i> LeetCode: <a href="https://leetcode.com/ajju53/"
+                    target="_blank">ajju53</a></div>
+        </section>
+
+        <section id="message" class="section">
+            <h2>Send a Message</h2>
+            <div class="message-container">
+                <form id="message-form">
+                    <input type="text" id="name" placeholder="Your Name" required>
+                    <input type="email" id="email" placeholder="Your Email" required>
+                    <textarea id="message" placeholder="Your Message" required></textarea>
+                    <button type="submit" class="submit-btn">Send Message</button>
+                </form>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        particlesJS.load('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: "#ffffff" },
+                shape: { type: "circle" },
+                opacity: { value: 0.5, random: false },
+                size: { value: 3, random: true },
+                line_linked: { enable: true, distance: 150, color: "#ffffff", opacity: 0.4, width: 1 },
+                move: { enable: true, speed: 6, direction: "none", random: false, straight: false, out_mode: "out", bounce: false }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: { onhover: { enable: true, mode: "repulse" }, onclick: { enable: true, mode: "push" }, resize: true },
+                modes: { repulse: { distance: 100, duration: 0.4 }, push: { particles_nb: 4 } }
+            },
+            retina_detect: true
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        const sections = document.querySelectorAll('.section');
+        const revealSection = (entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        };
+
+        const sectionObserver = new IntersectionObserver(revealSection, {
+            root: null,
+            threshold: 0.15,
+        });
+
+        sections.forEach(section => {
+            sectionObserver.observe(section);
+        });
+
+        const messageForm = document.getElementById('message-form');
+        messageForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            console.log('Form submitted:', {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                message: document.getElementById('message').value
+            });
+            alert('Message sent successfully!');
+            messageForm.reset();
+        });
+
+        function changeImageColor() {
+            const image = document.querySelector('.profile-image');
+            image.style.filter = image.style.filter === 'grayscale(100%)' ? 'none' : 'grayscale(100%)';
+        }
+        
+    </script>
+</body>
+
+</html> 
+
+
+
